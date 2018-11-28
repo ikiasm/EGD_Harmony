@@ -52,7 +52,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Included Files 
 // *****************************************************************************
 // *****************************************************************************
-
+#include <proc/p32mx795f512l.h>
 #include "app.h"
 
 // *****************************************************************************
@@ -158,7 +158,7 @@ void APP_Tasks ( void )
         case APP_STATE_SERVICE_TASKS:
         {
         
-            pulsoIny1(1700);
+            pulsoIny2(1700);
             break;
         }
 
