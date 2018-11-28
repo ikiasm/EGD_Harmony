@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app.h"
+#include "generales.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -86,6 +87,10 @@ APP_DATA appData;
 
 /* TODO:  Add any necessary callback functions.
 */
+
+
+void tick10usIny();
+void tick50usRpm();
 
 // *****************************************************************************
 // *****************************************************************************
@@ -142,7 +147,12 @@ void APP_Tasks ( void )
         case APP_STATE_INIT:
         {
             bool appInitialized = true;
-       
+            DRV_TMR0_Start();
+            DRV_TMR1_Start();
+            DRV_TMR2_Start();
+            
+            DRV_OC0_Start();
+            DRV_OC1_Start();
         
             if (appInitialized)
             {
@@ -155,7 +165,7 @@ void APP_Tasks ( void )
         case APP_STATE_SERVICE_TASKS:
         {
         
-            
+    
             break;
         }
 
@@ -172,6 +182,25 @@ void APP_Tasks ( void )
 }
 
  
+void tick10usIny()
+{ 
+    tickActualIny++;
+}
+
+void tick50usRpm()
+{
+    static UInt8 cont_dientes_ant=0;
+    tickActualRpm++;
+    if((tickActualRpm%20)==0)    //cada 20 tick de 50uS tengo 1mS
+    {
+            if(cont_dientes==cont_dientes_ant)
+            {
+                RPM=0;
+            }
+            cont_dientes_ant=cont_dientes;
+    }
+}
+
 
 /*******************************************************************************
  End of File

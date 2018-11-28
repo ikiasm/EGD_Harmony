@@ -58,6 +58,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "generales.h"
+#include <xc.h>
+
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -164,8 +167,13 @@ typedef struct
 */
 
 void APP_Initialize ( void );
+extern void deteccion_diente();
 
-
+ UInt32 tickActualIny = 0;
+ UInt32 tickActualRpm = 0;
+ UInt32 RPM;
+ UInt8 cont_dientes;
+ UInt32 tick_1ms;
 /*******************************************************************************
   Function:
     void APP_Tasks ( void )

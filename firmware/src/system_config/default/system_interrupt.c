@@ -78,19 +78,13 @@ void __ISR(_UART_5_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance0(void)
  
  
 
-void __ISR(_UART_2_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance1(void)
+void __ISR(_UART_2_VECTOR, ipl2AUTO) _IntHandlerDrvUsartInstance1(void)
 {
     DRV_USART_TasksTransmit(sysObj.drvUsart1);
     DRV_USART_TasksError(sysObj.drvUsart1);
     DRV_USART_TasksReceive(sysObj.drvUsart1);
 }
- 
- 
- 
 
- 
-
- 
 
  
 
@@ -98,16 +92,30 @@ void __ISR(_UART_2_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance1(void)
  
  
 
-void __ISR(_TIMER_2_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+ 
+
+ 
+ 
+void __ISR(_EXTERNAL_4_VECTOR, IPL4AUTO) _IntHandlerExternalInterruptInstance0(void)
 {
+    deteccion_diente();
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_4);
+}
+ 
+
+void __ISR(_TIMER_2_VECTOR, ipl5AUTO) IntHandlerDrvTmrInstance0(void)
+{
+    tick50usRpm();
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
-void __ISR(_TIMER_3_VECTOR, ipl0AUTO) IntHandlerDrvTmrInstance1(void)
+void __ISR(_TIMER_3_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance1(void)
 {
+    //timer para los pwm
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
-void __ISR(_TIMER_4_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance2(void)
+void __ISR(_TIMER_4_VECTOR, ipl6AUTO) IntHandlerDrvTmrInstance2(void)
 {
+    tick10usIny();
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
 }
  
