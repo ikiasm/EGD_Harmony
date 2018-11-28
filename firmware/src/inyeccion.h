@@ -69,10 +69,10 @@ extern "C" {
 
 #define INY1_TRIS       TRISDbits.TRISD12   //RD12
 #define INY1_OUTPUT     LATDbits.LATD12
-#define INY2_TRIS       TRISDbits.TRISD13   //RD11
+#define INY2_TRIS       TRISDbits.TRISD13   //RD13
 #define INY2_OUTPUT     LATDbits.LATD13
-#define INY3_TRIS       TRISDbits.TRISD6    //RD6
-#define INY3_OUTPUT     LATDbits.LATD6
+#define INY3_TRIS       TRISDbits.TRISD5    //RD5
+#define INY3_OUTPUT     LATDbits.LATD5
 #define INY4_TRIS       TRISDbits.TRISD7    //RD7
 #define INY4_OUTPUT     LATDbits.LATD7
 #define BANKA_TRIS      TRISDbits.TRISD1    //RD1
