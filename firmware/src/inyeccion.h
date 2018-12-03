@@ -78,15 +78,14 @@ extern "C" {
 #define BANKA_TRIS      TRISDbits.TRISD1    //RD1
 #define BANKA_OUTPUT    LATDbits.LATD1
 #define BANKB_TRIS      TRISDbits.TRISD3    //RD3
-#define BANKB_OUTPUT    LATDbits.LATD3    
+#define BANKB_OUTPUT    LATDbits.LATD3 
 #define INY1_OD     ODCDbits.ODCD12
 #define INY2_OD     ODCDbits.ODCD11
 #define INY3_OD     ODCDbits.ODCD6
 #define INY4_OD     ODCDbits.ODCD7
 #define BANKA_OD    ODCDbits.ODCD1
 #define BANKB_OD    ODCDbits.ODCD3
-//#define OPEN_DRAIN
-
+//#define   OPEN_DRAIN    
     // *****************************************************************************
     // *****************************************************************************
     // Section: Data Types
@@ -191,10 +190,10 @@ extern "C" {
 extern void inyeccionInit(void);
 //Funciones generadoras de pulsos para la activacion de las monobombas de cada cilindro
 //Parametro tiempo expreso en microsegundos
-extern void pulsoIny1(int tiempo);
-extern void pulsoIny2(int tiempo);
-extern void pulsoIny3(int tiempo);
-extern void pulsoIny4(int tiempo);
+extern bool pulsoIny1(int tiempo);
+extern bool pulsoIny2(int tiempo);
+extern bool pulsoIny3(int tiempo);
+extern bool pulsoIny4(int tiempo);
 //Funciones generadoras de pulsos modulados PWM para el control de monobombas
 //BancoA corresponde a los pulsos de cilindros 1 -2
 //BancoB corresponde a los pulsos de cilindros 3 - 4

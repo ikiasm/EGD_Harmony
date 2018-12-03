@@ -165,58 +165,182 @@ void inyeccionInit()
     
 }
 
-void pulsoIny1(int tiempo)
+bool pulsoIny1(int tiempo)
 {
+    static bool estado = false;
     static bool burstRunning = false;
-    if(burstRunning)
+    static int stage = 0;
+    switch(stage)
     {
-        INY1_OUTPUT = HIGH;
+        case 0:
+            estado = false;
+            burstRunning = pulsoBancoA(tiempo);
+            if(burstRunning)
+            {
+                INY1_OUTPUT = HIGH;
+                
+            }
+            
+            if(!burstRunning)
+            {
+                INY1_OUTPUT = LOW;
+                stage++;
+            }
+            break;
+        case 1:
+            estado = true;
+            stage = 0;
+            break;
+        case 2:
+            estado = false;
+            stage = 0;
+        default:
+            break;
     }
-    burstRunning = pulsoBancoA(tiempo);
-    if(!burstRunning)
-    {
-        INY1_OUTPUT = LOW;
-    }  
+    return estado;
 }
-void pulsoIny2(int tiempo)
+bool pulsoIny2(int tiempo)
 {
+    static bool estado = false;
     static bool burstRunning = false;
-    if(burstRunning)
+    static int stage = 0;
+    switch(stage)
     {
-        INY2_OUTPUT = HIGH;
+        case 0:
+            estado = false;
+            burstRunning = pulsoBancoA(tiempo);
+            if(burstRunning)
+            {
+                INY2_OUTPUT = HIGH;
+                
+            }
+            
+            if(!burstRunning)
+            {
+                INY2_OUTPUT = LOW;
+                stage++;
+            }
+            break;
+        case 1:
+            estado = true;
+            stage = 0;
+            break;
+        case 2:
+            estado = false;
+            stage = 0;
+        default:
+            break;
     }
-    burstRunning = pulsoBancoA(tiempo);
-    if(!burstRunning)
-    {
-        INY2_OUTPUT = LOW;
-    }  
+    return estado;
 }
-void pulsoIny3(int tiempo)
+bool pulsoIny3(int tiempo)
 {
+    static bool estado = false;
     static bool burstRunning = false;
-    if(burstRunning)
+    static int stage = 0;
+    switch(stage)
     {
-        INY3_OUTPUT = HIGH;
+        case 0:
+            estado = false;
+            burstRunning = pulsoBancoB(tiempo);
+            if(burstRunning)
+            {
+                INY3_OUTPUT = HIGH;
+                
+            }
+            
+            if(!burstRunning)
+            {
+                INY3_OUTPUT = LOW;
+                stage++;
+            }
+            break;
+        case 1:
+            estado = true;
+            stage = 0;
+            break;
+        case 2:
+            estado = false;
+            stage = 0;
+        default:
+            break;
     }
-    burstRunning = pulsoBancoB(tiempo);
-    if(!burstRunning)
-    {
-        INY3_OUTPUT = LOW;
-    }  
+    return estado;
 }
-void pulsoIny4(int tiempo)
+bool pulsoIny4(int tiempo)
 {
+    static bool estado = false;
     static bool burstRunning = false;
-    if(burstRunning)
+    static int stage = 0;
+    switch(stage)
     {
-        INY4_OUTPUT = HIGH;
+        case 0:
+            estado = false;
+            burstRunning = pulsoBancoB(tiempo);
+            if(burstRunning)
+            {
+                INY4_OUTPUT = HIGH;
+                
+            }
+            
+            if(!burstRunning)
+            {
+                INY4_OUTPUT = LOW;
+                stage++;
+            }
+            break;
+        case 1:
+            estado = true;
+            stage = 0;
+            break;
+        case 2:
+            estado = false;
+            stage = 0;
+        default:
+            break;
     }
-    burstRunning = pulsoBancoB(tiempo);
-    if(!burstRunning)
-    {
-        INY4_OUTPUT = LOW;
-    }  
+    return estado;
 }
+
+//void pulsoIny2(int tiempo)
+//{
+//    static bool burstRunning = false;
+//    if(burstRunning)
+//    {
+//        INY2_OUTPUT = HIGH;
+//    }
+//    burstRunning = pulsoBancoA(tiempo);
+//    if(!burstRunning)
+//    {
+//        INY2_OUTPUT = LOW;
+//    }  
+//}
+//void pulsoIny3(int tiempo)
+//{
+//    static bool burstRunning = false;
+//    if(burstRunning)
+//    {
+//        INY3_OUTPUT = HIGH;
+//    }
+//    burstRunning = pulsoBancoB(tiempo);
+//    if(!burstRunning)
+//    {
+//        INY3_OUTPUT = LOW;
+//    }  
+//}
+//void pulsoIny4(int tiempo)
+//{
+//    static bool burstRunning = false;
+//    if(burstRunning)
+//    {
+//        INY4_OUTPUT = HIGH;
+//    }
+//    burstRunning = pulsoBancoB(tiempo);
+//    if(!burstRunning)
+//    {
+//        INY4_OUTPUT = LOW;
+//    }  
+//}
 bool pulsoBancoA(int tiempo)
 {
     static int stage = 0;
@@ -298,12 +422,12 @@ bool pulsoBancoA(int tiempo)
             DRV_OC0_Stop();
             duracion = 20;
             //TRISDbits.TRISD1 = 0;
-            BANKA_OUTPUT = 1;//LATDbits.LATD1 = 0;//LATDbits.LATD1 = 1;            
+            BANKA_OUTPUT = 0;//LATDbits.LATD1 = 0;//LATDbits.LATD1 = 1;            
             if(tickActualIny > duracion)
             {
-                stage++; 
+                stage = 0; //si anda sacar case 5:
                 tickActualIny = 0;
-                BANKA_OUTPUT = 1;//LATDbits.LATD1 = 0;
+                BANKA_OUTPUT = 0;//LATDbits.LATD1 = 0;
                 tiempoAcumulado = tiempoAcumulado + duracion;
                 status = false;
                 //LATCbits.LATC15 = 0;
@@ -405,12 +529,12 @@ bool pulsoBancoB(int tiempo)
             DRV_OC1_Stop();
             duracion = 20;
             //TRISDbits.TRISD1 = 0;
-            BANKA_OUTPUT = 1;//LATDbits.LATD1 = 0;//LATDbits.LATD1 = 1;            
+            BANKA_OUTPUT = 0;//LATDbits.LATD1 = 0;//LATDbits.LATD1 = 1;            
             if(tickActualIny > duracion)
             {
-                stage++; 
+                stage = 0; //si anda sacar case 5:
                 tickActualIny = 0;
-                BANKA_OUTPUT = 1;//LATDbits.LATD1 = 0;
+                BANKA_OUTPUT = 0;//LATDbits.LATD1 = 0;
                 tiempoAcumulado = tiempoAcumulado + duracion;
                 status = false;
                 //LATCbits.LATC15 = 0;

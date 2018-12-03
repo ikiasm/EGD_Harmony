@@ -72,7 +72,10 @@ extern "C" {
 // Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
-
+#define REF_PMS1    55
+#define REF_PMS3    235
+#define REF_PMS4    415
+#define REF_PMS2    595
 // *****************************************************************************
 /* Application states
 
@@ -164,7 +167,7 @@ typedef struct
 */
 
 void APP_Initialize ( void );
-
+void secuenciaIny(int avance , int tiempoIny);
 
 /*******************************************************************************
   Function:
@@ -197,6 +200,7 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks( void );
+void ticks10usSincro(void);
 
 
 #endif /* _APP_H */

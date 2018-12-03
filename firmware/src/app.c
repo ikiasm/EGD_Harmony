@@ -77,7 +77,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_DATA appData;
-
+static int contaTicks;
+//probablemente estos static int sean extern int en el archivo comunicacion
+static int avance = 20;
+static int tiempoIny = 2000;
+//sincroFlag variable global creada en el archivo de sincronismo
+//una vez creada ahi, sacar de aca. (extern bool sincroFlag)
+static bool sincroFlag = false;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -154,11 +160,12 @@ void APP_Tasks ( void )
             }
             break;
         }
-
+        
         case APP_STATE_SERVICE_TASKS:
         {
         
-            pulsoIny2(1700);
+            secuenciaIny(avance , tiempoIny);
+            
             break;
         }
 
@@ -174,8 +181,96 @@ void APP_Tasks ( void )
     }
 }
 
- 
+void secuenciaIny(avance , tiempoIny)
+{
+    //sacar de aca la variable rpm una vez integrado el source deteccion de dientes
+    //esta variable va a ser global y la actualiza deteccion de dientes
+    int rpm = 700;
+    float avanceAux;
+    float ticksPorVuelta;
+    float ticksPorGrados;
+    static int ticksAPMS1;
+    static int ticksAPMS2;
+    static int ticksAPMS3;
+    static int ticksAPMS4;
+    static int ticksAvancePMS1;
+    static int ticksAvancePMS2;
+    static int ticksAvancePMS3;
+    static int ticksAvancePMS4;
+    static bool activo = false;
+    static int stage = 0;
+    
+    switch(stage)
+    {
+        case 0://init calculo de valores para los disparos
+            ticksPorVuelta = ((60000000) / (rpm * 10));
+            ticksPorGrados = ((ticksPorVuelta) / (360));
+            if(sincroFlag)
+            {
+                contaTicks = 0;
+                avanceAux = avance * ticksPorGrados;
+                ticksAPMS1 = REF_PMS1 * ticksPorGrados;
+                ticksAPMS2 = REF_PMS2 * ticksPorGrados;
+                ticksAPMS3 = REF_PMS3 * ticksPorGrados;
+                ticksAPMS4 = REF_PMS4 * ticksPorGrados;
+                ticksAvancePMS1 = (ticksAPMS1 - avanceAux);
+                ticksAvancePMS2 = (ticksAPMS2 - avanceAux);
+                ticksAvancePMS3 = (ticksAPMS3 - avanceAux);
+                ticksAvancePMS4 = (ticksAPMS4 - avanceAux);  
+                //sincroFlag = false;
+                stage++;
+            }
+            break;
+        case 1://inyeccion cilindro 1
+            if(contaTicks >= ticksAvancePMS1)
+            {
+                activo = pulsoIny1(tiempoIny);
+                if(activo)
+                {
+                    stage++;
+                }
+            }
+            break;
+        case 2://inyeccion cilindro 3
+            if(contaTicks >= ticksAvancePMS3)
+            {
+                activo = pulsoIny3(tiempoIny);
+                if(activo)
+                {
+                    stage++;
+                }
+            }
+            break;
+        case 3://inyeccion cilindro 4
+            if(contaTicks >= ticksAvancePMS4)
+            {
+                activo = pulsoIny4(tiempoIny);
+                if(activo)
+                {
+                    stage++;
+                }
+            }
+            break;
+        case 4://inyeccion cilindro 2
+            if(contaTicks >= ticksAvancePMS2)
+            {
+                activo = pulsoIny2(tiempoIny);
+                if(activo)
+                {
+                    //sincroFlag = false;
+                    stage = 0;
+                }
+            }            
+            break;
+        default:
+            break;
+    }
+}
 
+void ticks10usSincro()
+{
+    contaTicks++;
+}
 /*******************************************************************************
  End of File
  */
