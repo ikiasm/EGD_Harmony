@@ -68,22 +68,22 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: System Interrupt Vector Functions
 // *****************************************************************************
 // *****************************************************************************
-void __ISR(_UART_5_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance0(void)
-{
-    DRV_USART_TasksTransmit(sysObj.drvUsart0);
-    DRV_USART_TasksError(sysObj.drvUsart0);
-    DRV_USART_TasksReceive(sysObj.drvUsart0);
-}
- 
- 
- 
-
-void __ISR(_UART_2_VECTOR, ipl2AUTO) _IntHandlerDrvUsartInstance1(void)
-{
-    DRV_USART_TasksTransmit(sysObj.drvUsart1);
-    DRV_USART_TasksError(sysObj.drvUsart1);
-    DRV_USART_TasksReceive(sysObj.drvUsart1);
-}
+//void __ISR(_UART_5_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance0(void)
+//{
+//    DRV_USART_TasksTransmit(sysObj.drvUsart0);
+//    DRV_USART_TasksError(sysObj.drvUsart0);
+//    DRV_USART_TasksReceive(sysObj.drvUsart0);
+//}
+// 
+// 
+// 
+//
+//void __ISR(_UART_2_VECTOR, ipl2AUTO) _IntHandlerDrvUsartInstance1(void)
+//{
+//    DRV_USART_TasksTransmit(sysObj.drvUsart1);
+//    DRV_USART_TasksError(sysObj.drvUsart1);
+//    DRV_USART_TasksReceive(sysObj.drvUsart1);
+//}
 
 
  

@@ -59,7 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "generales.h"
-#include <xc.h>
+//#include <xc.h>
 
 
 // DOM-IGNORE-BEGIN
@@ -174,6 +174,7 @@ extern void deteccion_diente();
  UInt32 RPM;
  UInt8 cont_dientes;
  UInt32 tick_1ms;
+ UInt32 SPI_read;
 /*******************************************************************************
   Function:
     void APP_Tasks ( void )

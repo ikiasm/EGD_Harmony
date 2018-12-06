@@ -15,8 +15,8 @@
  */
 /* ************************************************************************** */
 
-#ifndef _GENERALES_FILE_NAME_H    /* Guard against multiple inclusion */
-#define _GENERALES_FILE_NAME_H
+#ifndef _EXAMPLE_FILE_NAME_H    /* Guard against multiple inclusion */
+#define _EXAMPLE_FILE_NAME_H
 
 
 /* ************************************************************************** */
@@ -65,11 +65,14 @@ extern "C" {
       @Remarks
         Any additional remarks
      */
-#define GENERALES_CONSTANT 0
+#include "generales.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+//#include "plib.h"
+#include <xc.h>
+#include "app.h"
 
     // *****************************************************************************
     // *****************************************************************************
@@ -103,14 +106,14 @@ extern "C" {
         Describe enumeration elements and structure and union members above each 
         element or member.
      */
-    typedef struct _generales_struct_t {
+    typedef struct _example_struct_t {
         /* Describe structure member. */
         int some_number;
 
         /* Describe structure member. */
         bool some_flag;
 
-    } generales_struct_t;
+    } example_struct_t;
 
 
     // *****************************************************************************
@@ -167,62 +170,18 @@ extern "C" {
             return 3;
         }
      */
-    int GeneralesFunction(int param1, int param2);
-
+UInt8 memoria_read(UInt32 dir);
+UInt8 memoria_write(UInt32 valor, UInt32 direccion);
+extern void memoria_get_adress();
+void waitBusy();
+UInt32 SPI_transfer( UInt32 b);
 
     /* Provide C++ Compatibility */
-    
-    /*--------------------------DEFINES---------------------------*/
-    
-//SALIDAS
-#define HIGH                 1
-#define LOW                  0
-#define HIGH_INV             0    
-#define LOW_INV              1
-#define INPUT                1
-#define OUTPUT               0
-#define TRUE                 1
-#define FALSE                0
-    
-/*---------------------VARIABLES GLOBALES-----------------------*/
-
-
-/*-------------------PROTOTIPO DE FUNCIONES---------------------*/
-    
-    
-/*! Entero de 8 bits con signo */
-typedef signed char Int8;
-/*! Entero de 8 bits sin signo */
-typedef unsigned char UInt8;
-/*! Entero de 16 bits con signo */
-typedef signed short Int16;
-/*! Entero de 16 bits sin signo */
-typedef unsigned short UInt16;
-/*! Entero de 32 bits con signo */
-typedef signed int Int32;
-/*! Entero de 32 bits sin signo */
-typedef unsigned int UInt32;
-/*! Entero de 64 bits con signo */
-typedef signed long int Int64;
-/*! Entero de 64 bits sin signo */
-typedef unsigned long int UInt64;
-/*! Flotante */
-typedef float Float;
-/*! Flotante con mayor presicion */
-typedef double Double;
-/*! Boleano
-   Solo puede tomar los valores TRUE o FALSE
- */
-typedef Int8 Bool;
-/*! Caracter */
-typedef unsigned char Char;
-/*! Para manejo de numeros reales */
-typedef double Real;
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _GENERALES_FILE_NAME_H */
+#endif /* _EXAMPLE_FILE_NAME_H */
 
 /* *****************************************************************************
  End of File

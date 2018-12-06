@@ -52,9 +52,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Included Files 
 // *****************************************************************************
 // *****************************************************************************
-
+#include "spi_memoria.h"
 #include "app.h"
-#include "generales.h"
+
 
 // *****************************************************************************
 // *****************************************************************************
@@ -151,8 +151,10 @@ void APP_Tasks ( void )
             DRV_TMR1_Start();
             DRV_TMR2_Start();
             
-            DRV_OC0_Start();
-            DRV_OC1_Start();
+//            DRV_OC0_Start();
+//            DRV_OC1_Start();
+            
+            DRV_SPI_Open();
         
             if (appInitialized)
             {
@@ -164,7 +166,7 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-        
+            memoria_get_adress();
     
             break;
         }
@@ -191,7 +193,7 @@ void tick50usRpm()
 {
     static UInt8 cont_dientes_ant=0;
     tickActualRpm++;
-    if((tickActualRpm%20)==0)    //cada 20 tick de 50uS tengo 1mS
+    if((tickActualRpm%60)==0)    //cada 60 tick de 50uS tengo 3mS
     {
             if(cont_dientes==cont_dientes_ant)
             {

@@ -23,7 +23,20 @@
 
 /* This section lists the other files that are included in this file.
  */
+#include "spi_memoria.h"
+#include "app.h"
+//#include "plib.h"
+//#include <peripheral/spi_5xx_6xx_7xx.h>
 
+
+#define SS_ENABLE_TRIS                   TRISDbits.TRISD14       //PIN 47 (SS3)
+#define SS_ENABLE_LAT                    LATDbits.LATD14      
+#define SCK_ENABLE_TRIS                   TRISDbits.TRISD15       //PIN 48 (SCK3)
+#define SCK_ENABLE_LAT                    LATDbits.LATD15
+#define SDI_ENABLE_TRIS                   TRISFbits.TRISF2       //PIN 52 (SDI3)
+#define SDI_ENABLE_LAT                    LATFbits.LATF2
+#define SDO_ENABLE_TRIS                   TRISFbits.TRISF8       //PIN 53 (SDO3)
+#define SDO_ENABLE_LAT                    LATFbits.LATF8   
 /* TODO:  Include other files here if needed. */
 
 
@@ -56,7 +69,6 @@
  */
 int global_data;
 
-#include "deteccion_diente.h"
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -113,8 +125,9 @@ int global_data;
         return 3;
     }
  */
-
-void deteccion_diente();
+static int ExampleLocalFunction(int param1, int param2) {
+    return 0;
+}
 
 
 /* ************************************************************************** */
@@ -139,63 +152,112 @@ void deteccion_diente();
   @Remarks
     Refer to the example_file.h interface header for function usage details.
  */
-
-void deteccion_diente()
+void memoria_get_adress()
 {
-    static UInt32 tiempoAnt,RPM_ant, RPM_2;
-    static UInt8 i,j;
-    static UInt8 flag_RPM=0;
-    float seg_RPM;
-     static UInt32 deltaAnt;
-     UInt32 delta = tickActualRpm - tiempoAnt;
-     UInt32 doble_diente=deltaAnt*0.7;
-  //   static UInt16 promedioDientes;
- //    static UInt16 vectorDelta[58];
- //    UInt16 spanDelta;
-     
-    if((delta < doble_diente) || (cont_dientes==12))    //mido RPM en señal de fase (55° del PMS)
-    {
-     //       seg_RPM=((tiempoActual*0.000050*60)/cont_dientes);
-//        if(RPM_ant>1000)                                         //para estas rpm usaba esta formula
-//        {
-//            RPM = ((60000000)/(tickActualRpm * 50));
-//        }
-//        else if(RPM_ant<=1000)                                      //para estas rpm esta formula tenia mas precision
-        {
-        seg_RPM=(deltaAnt*12*50);
-        RPM=((60000000/seg_RPM)*2);
-        }
-        //
-        if(flag_RPM==0)   //&& tick_1ms>10)   
-        {
-                RPM_ant=RPM;
-                flag_RPM=1;
-        }
-
-        if((RPM>RPM_ant+50 || RPM<RPM_ant-50) && (flag_RPM==1))     
-        {
-            flag_RPM=0;
-            RPM_ant=RPM;
-        }
-        if((RPM>RPM_ant+20 || RPM<RPM_ant-20) && (flag_RPM==1))            //  || 900>
-        {
-            RPM=RPM_ant;
-        }
-        if(RPM<90 && RPM>4500)
-        {
-            RPM=RPM_ant;
-        }
-        cont_dientes=0;
-        tickActualRpm=0;
-//        promedioDientes=0;
-//        i=0;
-    }
-
-    tiempoAnt = tickActualRpm;
-    deltaAnt = delta;
-    cont_dientes++;
-     
+    UInt8 dir_carga, dir_rpm;
+    UInt32 direccion;
+    UInt32 carga;
+//    if(conversion_terminada==1)
+//    {
+//    carga= result[AN03];    // saco el porcentaje
+//    dir_carga = carga / (0x49);
+//    dir_rpm = RPM / 500;
+//    direccion = dir_carga*0x10 + dir_rpm;
+    memoria_read(0x000000BF);
+   // memoria_write(0xAA, 0x000000BF); 
+//    if(dir_rpm < 0)
+//    {
+//     dir_rpm++;   
+//    }
+//    }
 }
+UInt8 memoria_read(UInt32 dir)
+{
+    UInt32 dato_mapa;
+    UInt32 direccion_completa;
+    static UInt8 mapa=0;
+ //   waitBusy();
+    SS_ENABLE_LAT = 0;
+    switch(mapa)
+    {
+        case 0: //direccion_completa = 0x03000100 + dir;  //READ + dir INYECC
+               // direccion_completa = 0x0301AA55;
+             //   SpiChnPutC(0x3, 0x0301FFF6);
+//                SpiChnPutC(0x3, 0x030000A0);
+                SPI_transfer(0x030000A0);
+                dato_mapa=SPI_transfer( 0);
+//                SpiChnPutC(0x3, 0);                 //dummy byte
+                mapa = 0;mapa = 0;mapa = 0;mapa = 0;
+                dato_mapa=SPI3BUF;
+                mapa = 0;
+                SS_ENABLE_LAT = 1;
+                break;
+    //    case 1: SDO_ENABLE_TRIS = 0x03000200 + dir;  //READ + dir ENCENDIDO
+        case 1: //SDO_ENABLE_TRIS = 0x0301FFFF;
+                mapa = 0;
+                break;
+        default: mapa = 0; break;
+    }
+//    if(SPI3STATbits.SPIBUSY == 0)
+//    {
+//    dato_mapa = SPI3BUF;
+//    SS_ENABLE_LAT = LOW_INV;
+//    }
+
+       
+}
+UInt8 memoria_write(UInt32 valor, UInt32 direccion)
+{
+    UInt32 dato_escrito;
+//    waitBusy();
+//    direccion = direccion + 0x02000000;
+//    SPI3CONbits.MODE16 = 0;     // 8 bit mode
+//    SPI3CONbits.MODE32 = 0;
+    
+    SS_ENABLE_LAT = 0;
+    SpiChnPutC(0x3, 0x06000000);    //WREN
+    SS_ENABLE_LAT = 1;
+   
+    SS_ENABLE_LAT = 0;
+    
+//    SPI3CONbits.MODE16 = 0;     // 8 bit mode
+//    SPI3CONbits.MODE32 = 1;
+    
+    SpiChnPutC(0x3, 0x020000A0);    //WRITE+ADRESS
+    SpiChnPutC(0x3, 0xBFAA000A);        //data  32bit
+    SpiChnPutC(0x3, 0);
+//   // SPI3BUF=0x020000BF;
+//    dato_escrito=SPI3BUF;
+//    Delay10KTCYx(1);
+    //delay_ms(1);
+  //  waitBusy();
+    SS_ENABLE_LAT = 1;
+}
+void waitBusy()
+{
+    int status = 0;
+ 
+    do{
+        SS_ENABLE_LAT = 0;                         // Select EEPROM
+        SpiChnPutC(0x3, 0x05000000);           // Read EEPROM status register
+       // status = SPI_transfer( 0);     // send dummy byte to receive incoming data
+        SpiChnPutC(0x3, 0);
+        status=SPI3BUF;
+        status=status;
+        SS_ENABLE_LAT = 1;                         // Release EEPROM
+    }while( status & 0x01);             // write-in-progress while status<0> set to '1'
+ 
+  //  return 0;
+} // END waitBusy()
+UInt32 SPI_transfer( UInt32 b)
+{
+    SPI3BUF = b;                        // write to buffer for TX
+    while( !SPI3STATbits.SPITBE);       // wait transfer complete
+    return SPI3BUF;                     // read the received value
+} // END SPI1_transfer()
+
+
+
 
 /* *****************************************************************************
  End of File
